@@ -1,4 +1,4 @@
-﻿; (function (global, factory) {
+; (function (global, factory) {
     "use strict";
     if (typeof module !== "undefined" && module.exports) {
         module.exports = global.document ?
@@ -1128,11 +1128,11 @@
                 if (transferFormats.indexOf(requestedTransferFormat) >= 0) {
                     if ((transport === HttpTransportType.WebSockets && !this.options.WebSocket) ||
                         (transport === HttpTransportType.ServerSentEvents && !this.options.EventSource)) {
-                        this.logger.log(LogLevel.Debug, "Skipping transport '" + HttpTransportType[transport] + "' because it is not supported in your environment.'");
-                        return new Error("'" + HttpTransportType[transport] + "' is not supported in your environment.");
+                        this.logger.log(LogLevel.Debug, "Skipping transport '" + endpoint.transport + "' because it is not supported in your environment.'");
+                        return new Error("'" + endpoint.transport + "' is not supported in your environment.");
                     }
                     else {
-                        this.logger.log(LogLevel.Debug, "Selecting transport '" + HttpTransportType[transport] + "'.");
+                        this.logger.log(LogLevel.Debug, "Selecting transport '" + endpoint.transport + "'.");
                         try {
                             return this.constructTransport(transport);
                         }
@@ -1141,11 +1141,11 @@
                         }
                     }
                 } else {
-                    this.logger.log(LogLevel.Debug, "Skipping transport '" + HttpTransportType[transport] + "' because it does not support the requested transfer format '" + _ITransport__WEBPACK_IMPORTED_MODULE_2__["TransferFormat"][requestedTransferFormat] + "'.");
+                    this.logger.log(LogLevel.Debug, "Skipping transport '" + endpoint.transport + "' because it does not support the requested transfer format '" + _ITransport__WEBPACK_IMPORTED_MODULE_2__["TransferFormat"][requestedTransferFormat] + "'.");
                 }
             } else {
-                this.logger.log(LogLevel.Debug, "Skipping transport '" + HttpTransportType[transport] + "' because it was disabled by the client.");
-                return new Error("HttpTransportType " + HttpTransportType[transport] + " is disabled by the client.");
+                this.logger.log(LogLevel.Debug, "Skipping transport '" + endpoint.transport + "' because it was disabled by the client.");
+                return new Error("HttpTransportType " + endpoint.transport + " is disabled by the client.");
             }
         }
     };
