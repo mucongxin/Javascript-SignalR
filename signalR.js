@@ -46,6 +46,7 @@
             Text: 0,
             Binary: 1
         },
+        TransferFormatMapping = ["Text", "Binary"],
         HttpTransportType = {
             /** Specifies no transport preference. */
             None: 0,
@@ -103,7 +104,7 @@
             Disconnected: "Disconnected",
             Disconnecting: "Disconnecting"
         },
-        indexOf = function (arr, el, from) {
+        indexOf = function (arr, el, i) {
             var len = arr.length >>> 0;
             from = Number(from) || 0;
             from = from < 0 ? Math.ceil(from) : Math.floor(from);
@@ -134,8 +135,34 @@
         };
 
     if (!Array.prototype.indexOf) {
-        Array.prototype.indexOf = function (obj) {
-            return indexOf.call(this, obj);
+        Array.prototype.indexOf = function (searchElement, fromIndex) {
+            if (this === undefined || this === null) {
+                throw new TypeError('"this" is null or not defined');
+            }
+
+            var length = this.length >>> 0; // Hack to convert object.length to a UInt32
+
+            fromIndex = +fromIndex || 0;
+
+            if (Math.abs(fromIndex) === Infinity) {
+                fromIndex = 0;
+            }
+
+            if (fromIndex < 0) {
+                fromIndex += length;
+
+                if (fromIndex < 0) {
+                    fromIndex = 0;
+                }
+            }
+
+            for (; fromIndex < length; fromIndex++) {
+                if (this[fromIndex] === searchElement) {
+                    return fromIndex;
+                }
+            }
+
+            return -1;
         };
     }
     signalR.fn = signalR.prototype = {
@@ -1141,7 +1168,7 @@
                         }
                     }
                 } else {
-                    this.logger.log(LogLevel.Debug, "Skipping transport '" + endpoint.transport + "' because it does not support the requested transfer format '" + _ITransport__WEBPACK_IMPORTED_MODULE_2__["TransferFormat"][requestedTransferFormat] + "'.");
+                    this.logger.log(LogLevel.Debug, "Skipping transport '" + endpoint.transport + "' because it does not support the requested transfer format '" + TransferFormatMapping[requestedTransferFormat] + "'.");
                 }
             } else {
                 this.logger.log(LogLevel.Debug, "Skipping transport '" + endpoint.transport + "' because it was disabled by the client.");
@@ -1850,7 +1877,6 @@
 
             this.cleanupTimeout();
             this.cleanupPingTimer();
-            console.log(this.connectionState, "this.connectionStatethis.connectionStatethis.connectionState")
             if (this.connectionState === HubConnectionState.Disconnecting) {
                 this.completeClose(error);
             } else if (this.connectionState === HubConnectionState.Connected && this.reconnectPolicy) {
@@ -1879,7 +1905,6 @@
             var previousReconnectAttempts = 0;
             var retryError = error !== undefined ? error : new Error("Attempting to reconnect due to a unknown error.");
             var nextRetryDelay = this.getNextRetryDelay(previousReconnectAttempts++, 0, retryError);
-            console.log(nextRetryDelay, "reconnect");
             if (nextRetryDelay === null) {
                 this.completeClose(error);
                 return;
@@ -2023,6 +2048,7 @@
             if (!this.methods[methodName]) {
                 this.methods[methodName] = [];
             }
+
             // Preventing adding the same handler multiple times.
             if (this.methods[methodName].indexOf(newMethod) !== -1) {
                 return;
