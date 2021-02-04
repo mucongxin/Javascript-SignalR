@@ -8,7 +8,9 @@ Real-time applications using ASP.NET Core.Javascript client for ASP.NET SignalR.
 使用方法与官方ASP.NET Core SignalR JavaScript基本一致
 
 ## 依赖
+```
 <script src="https://cdn.bootcdn.net/ajax/libs/promise-polyfill/8.2.0/polyfill.js"></script>
+```
 
 ## 创建对象
 
