@@ -11,22 +11,31 @@ Real-time applications using ASP.NET Core.Javascript client for ASP.NET SignalR.
 <script src="https://cdn.bootcdn.net/ajax/libs/promise-polyfill/8.2.0/polyfill.js"></script>
 
 ## 创建对象
+
+```
 var connection = new signalR.HubConnectionBuilder()
     .withUrl("/chathub")
     .configureLogging(signalR.LogLevel.Information)
     .build();
+```
     
 ## 开启连接
+```
 connection.start().then(function(){
    console.log("连接成功");
 },function(){
    console.log("连接失败");
 });
+```
 
 ## 调用服务端方法
+```
 connection.send(methodName,agrs...);
+```
 
 ## 注册客户端方法供服务端调用
+```
 connection.on("clientMethod",(res)=>{
     console.log("被服务端调用");
 });
+```
